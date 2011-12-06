@@ -1,0 +1,15 @@
+<div class="experiment_metadata">
+  <ul>
+    {% for parameterset in experiment.experimentparameterset_set.all %}
+		<p>
+        {% include "tardis_portal/ajax/parameter_table.html" with parameters=parameterset.experimentparameter_set.all %}
+        {% if has_write_permissions %}{% if not experiment.public %}
+            <div class="edit_schema" style="display: inline;"><a href="{% url tardis.tardis_portal.views.edit_experiment_par parameterset.id %}"
+                class="jqModalExpEdit" data-toggle_selector=".experiment_metadata_toggle"><img src="{{ STATIC_URL }}/images/icon_changelink.gif" ></a></div>
+        {% endif %}{% endif %}
+		</p>
+    {% empty %}
+        There is no metadata for this experiment.
+    {% endfor %}
+  </ul>
+</div>

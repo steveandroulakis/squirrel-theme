@@ -1,0 +1,17 @@
+<ul>
+  {% for parameterset in dataset.datasetparameterset_set.all %}
+	<p>
+     {% include "tardis_portal/ajax/parameter_table.html" with parameters=parameterset.datasetparameter_set.all %}
+     {% if has_write_permissions %}{% if not dataset.experiment.public %}{% if not immutable %}
+     <div class="edit_schema" style="display: inline;">
+         <a href="{% url tardis.tardis_portal.views.edit_dataset_par parameterset.id %}"
+             class="jqModalDsEdit" data-toggle_selector="#dataset_metadata_toggle_{{dataset.id}}">
+            <img src="{{ STATIC_URL }}/images/icon_changelink.gif">
+         </a>
+     </div>
+     {% endif %}{% endif %}{% endif %}
+	</p>
+  {% empty %}
+    There is no metadata for this dataset
+  {% endfor %}
+</ul>
