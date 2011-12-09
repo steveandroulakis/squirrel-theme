@@ -2,8 +2,24 @@ body {
 	background-color: #5A6B5D;
 }
 
+h1 {
+  color:#781F1F;
+  font-size:2.2em;
+  font-weight:normal;
+  letter-spacing: normal;
+}
+
 /*no search display*/
 .search-bar-wrapper
 {
     display: none;
+}
+
+#index .entry {
+    font-size: 130%;
+    margin-left: 20px;
+}
+
+#index .entry li {
+    margin-bottom: 10px;
 }
