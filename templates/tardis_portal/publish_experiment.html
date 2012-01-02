@@ -1,0 +1,162 @@
+<!--
+ Copyright (c) 2010, Monash e-Research Centre
+   (Monash University, Australia)
+ Copyright (c) 2010, VeRSI Consortium
+   (Victorian eResearch Strategic Initiative, Australia)
+ All rights reserved.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+    
+    *  Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+    *  Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+    *  Neither the name of the VeRSI, the VeRSI Consortium members, nor the
+       names of its contributors may be used to endorse or promote products
+       derived from this software without specific prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+{% extends "tardis_portal/portal_template.html" %}
+{% load creativecommons %}		
+		{% block content %}
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#ands_register_checkbox').click(function() {
+					  if ($('#ands_register_checkbox').is(':checked'))
+					  {
+						$("#default_publish").show();
+					  }
+					  else
+					  {
+						 $("#default_publish").hide();
+				      }
+
+				});	
+			});		
+		</script>		
+			<div id="content">
+				<div class="post">
+					<h1 class="title"><a name="abouttardis">Publish Experiment</a></h1>
+					<div class="entry">
+							
+							
+							{% if publish_result %}
+						<p>
+							{% if legal %}
+								
+								{% if success %}
+									<h3>Experiment Publication Successful</h3>
+									<a href="../">Go back to your experiment.</a>
+								{% else %}
+									<h3><span style="color: red;">Experiment Publication Failed</span></h3>
+									<p>See messages below for more information:</p>
+									
+									<p>
+										{% for message in messages %}
+											{{message}}<br/>
+										{% endfor %}
+									</p>
+									
+									<p><a href=".">Try to publish again</a></p>
+									
+								{% endif %}
+							
+							{% else %}
+								
+								<h3><span style="color: red;">Experiment Publication Failed</span></h3>
+								Please accept the legal agreement.
+							
+							{% endif %}
+						
+						</p>
+						{% else %}
+							{% if not has_cc_license %}
+									No license is currently set for this experiment. Please go to the <a href="{% url tardis.tardis_portal.views.choose_license experiment.id %}">Choose License page to set it.</a>
+							{% else %}
+                                <form action="." method="POST" class="publishform">
+                                <p>
+                                    <strong>Experiment Name:</strong> {{ experiment.title }}
+                                </p>
+
+                                {% if not has_ands_registered %}
+                                <div class="white_box">
+                                    <h2>ANDS Research Data Australia Registration</h2>
+                                    <p><img src="{{ STATIC_URL }}/images/ands-logo-hi-res.jpg"></p>
+
+<p>You have not yet registered this experiment with <a href="http://services.ands.org.au/home/orca/rda/" target="_blank">ANDS Research Data Australia</a>. Doing so has many benefits including: 
+<ul>
+	<li>Persistent handles to your metadata or data</li>
+	<li>Possible citation of the dataset as research in its own right</li>
+	<li>A possible increase in citation of the associated publications, as other researchers would be able to re-use the data</li>
+</ul></br><br/>
+</p>
+					    <p><strong><a href="../">Click here to go back to your Experiment. From there click 'ANDS Register'.</a></strong></p>
+<p>or</p>
+                                    <input id="ands_register_checkbox" type="checkbox" name="ands_register" value="do_not_ands_register">I do <strong>not</strong> wish to register my data first with Research Data Australia.<br/>
+
+                                </div>
+                                <br/>
+                                {% endif %}
+
+                                <div id="default_publish" {% if not has_ands_registered %}style="display: none"{% endif%}>
+                                <div class="white_box">
+                                    <h2>Licensing</h2>
+
+                                    <p>
+                                        Current experiment license is:
+                                    </p>
+                                    <p>
+                                        <div class="license_box">{{experiment.id|show_cc_license|safe}}</div>
+                                    </p>
+                                    <p>
+                                        If you'd like to change this, then go to the <a href="{% url tardis.tardis_portal.views.choose_license experiment.id %}">Choose License page before publishing.</a>
+                                    </p>
+                                </div>
+
+                                <div class="white_box">
+                                <h2>Legal Agreement:</h2>
+                                <p>
+                                    {{legaltext|safe}}
+                                <p>
+                                <input type="checkbox" name="legal" value="Agree">I agree to the above terms and wish to make my data publicly available<br>
+                                </p>
+                                </div>
+                                <br/>
+                                <input id="button" type="submit" value="Publish Experiment"/>
+
+                                </div>
+
+                                </form>
+                             {% endif %}
+						{% endif %}
+			
+		    		</div>
+		    	</div>
+			</div>
+		    <br/>
+			
+			{% endblock %} {% block sidebar %}
+				
+				<ul>
+					<li>
+						<h2></h2>
+							
+							<ul>
+							
+							</ul>
+					</li>
+				</ul>
+		
+		<p>
+			{% endblock %}
